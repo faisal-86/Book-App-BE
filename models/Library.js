@@ -2,17 +2,19 @@ const mongoose = require('mongoose');
 
 // Category Schema
 const librarySchema = mongoose.Schema({
-    book:{
+    "book":{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Book'
     },
-    user:{
+    "user":{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
     },
 
+},
+{
+  timestamps: true
 })
-
 // Library Model
 const Library = mongoose.model("Library", librarySchema);
 
