@@ -1,2 +1,2 @@
-# Book-App-BE
+# Novagram-BE
 Backend
