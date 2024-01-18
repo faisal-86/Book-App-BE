@@ -6,7 +6,7 @@ title : String,
 author : String,
 description : String,
 isbn : String,
-public_date : Date,
+publish_date : Date,
 image : String,
 
 categoryId:{
