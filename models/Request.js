@@ -2,19 +2,21 @@ const mongoose = require('mongoose');
 
 // Category Schema
 const requestSchema = mongoose.Schema({
-    book:{
+    "book":{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Book'
     },
-    user:{
+    "user":{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
     },
 
-    desceiption : String,
-    approvel : Boolean
+    "description" : String,
+    "approval" : Boolean
+},
+{
+  timestamps: true
 })
-
 // User Model
 const Request = mongoose.model("Request", requestSchema);
 

@@ -2,18 +2,20 @@ const mongoose = require('mongoose');
 
 // Category Schema
 const reviewSchema = mongoose.Schema({
-    book:{
+    "book":{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Book'
     },
-    user:{
+    "user":{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
     },
-    comment : String,
-    rating : Number
+    "comment" : String,
+    "rating" : Number
+},
+{
+  timestamps: true
 })
-
 // Review Model
 const Review = mongoose.model("Review", reviewSchema);
 

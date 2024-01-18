@@ -2,28 +2,36 @@ const mongoose = require('mongoose');
 
 // Book Schema
 const bookSchema = mongoose.Schema({
-title : String,
-author : String,
-description : String,
-isbn : String,
-publish_date : Date,
-image : String,
+"title" : {
+    type: String,
+    required: true
+},
+"author" : 
+{   type: String,
+    required: true
+},
+"description" : String,
+"isbn" : String,
+"publish_date" : Date,
+"image" : String,
 
-categoryId:{
+"category":{
     type: mongoose.Schema.Types.ObjectId,
     ref:'Category'
 },
 
-libraryId:{
+"library":{
     type: mongoose.Schema.Types.ObjectId,
     ref:'Library'
 },
-reviewId:{
+"review":{
     type: mongoose.Schema.Types.ObjectId,
     ref:'Review'
 },
 
-
+},
+{
+  timestamps: true
 })
 
 const Book = mongoose.model("Book", bookSchema);
