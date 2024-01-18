@@ -37,4 +37,18 @@ exports.user_update_post = (req, res) => {
 }
 
 // Get books in users library
-// User deletes his account
+exports.user_library_get = (req, res) => {
+    User.findById(req.user.id)
+        .populate('library')  
+        .then((user) => {
+            console.log('Fetching user library...');
+            res.json({ library: user.library });
+        })
+        .catch((err) => {
+            console.log('Error getting user library');
+            console.log(err);
+            res.json({ message: err.message }).status(404);
+        });
+};
+
+
