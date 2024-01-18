@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Category Schema
-const requestsSchema = mongoose.Schema({
+const requestSchema = mongoose.Schema({
     book:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Book'
@@ -16,7 +16,7 @@ const requestsSchema = mongoose.Schema({
 })
 
 // User Model
-const Requests = mongoose.model("Requests", requestsSchema);
+const Request = mongoose.model("Request", requestSchema);
 
 // Export
 module.exports = User;
