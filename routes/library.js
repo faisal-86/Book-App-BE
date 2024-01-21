@@ -3,7 +3,7 @@ const router = express.Router();
 const libraryController = require('../controllers/library');
 
 // Route to get the user's library
-router.get('/library',  libraryController.user_library_get);
+router.get('/user/library',  libraryController.user_library_get);
 
 // Route to add a book to the user's library
 router.post('/user/library/add',  libraryController.add_to_library_post);
