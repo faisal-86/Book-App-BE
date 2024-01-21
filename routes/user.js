@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
 
+router.use(express.json());
+
+
 // Route to get user details
 router.get('/users/:id', userController.user_detail_get);
 

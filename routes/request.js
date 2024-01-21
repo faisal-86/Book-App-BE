@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const requestController = require('../controllers/request');
 
+router.use(express.json());
+
+
 // Route to submit a book request
 router.post('/requests/submit',  requestController.submit_request_post);
 

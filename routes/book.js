@@ -3,6 +3,9 @@ const router = express.Router();
 const bookController = require('../controllers/book');
 const upload = require('../helper/multerUploader');
 
+router.use(express.json());
+
+
 
 // Multer configuration for handling file uploads
 // const upload = multer({ dest: 'public/images' });

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const reviewController = require('../controllers/review');
 
+router.use(express.json());
+
 // Route to submit a book review
 router.post('/reviews/submit', reviewController.submit_review_post);
 
