@@ -1,5 +1,5 @@
-const {Category} = require('../models/Category');
-const {Book} = require('../models/Book');
+const Category = require('../models/Category');
+const Book = require('../models/Book');
 const fs = require("fs");
 const uploadCloudinary = require('../helper/cloudUploader');
 
@@ -106,7 +106,7 @@ exports.category_detail_get = (req, res) => {
 
 exports.category_books_get = (req, res) => {
     const categoryId = req.query.id;
-    Book.find({ category: categoryId })
+    Book.find({ category: categoryId }).populate('category')
         .then(books => {
             res.json(books);
         })
