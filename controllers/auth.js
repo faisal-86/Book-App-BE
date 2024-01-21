@@ -37,42 +37,44 @@ exports.auth_signin_post = async (req, res) => {
     let { emailAddress, password } = req.body;
     console.log(`Sign in attempt by ${emailAddress}`);
 
-    try{
-        let user = await User.findOne({emailAddress});
-        
-        if(!user)
-        {
+    try {
+        let user = await User.findOne({ emailAddress });
+
+        if (!user) {
             console.log('User not found');
-            return res.json({"message": "Wrong username"}).status(400);
+            return res.json({ "message": "Wrong username" }).status(400);
         }
+
         console.log(user);
-        
+
         // Password Comparison
         const isMatched = await bcrypt.compareSync(password, user.password);
-    
-        if(!isMatched) {
-            return res.json({"message": "Wrong password"}).status(400);
+
+        if (!isMatched) {
+            return res.json({ "message": "Wrong password" }).status(400);
         }
-    
+
         // Generate JWT
         const payload = {
             user: {
-            id: user._id
+                id: user._id
             }
         }
-    
+
         jwt.sign(
             payload,
             process.env.SECRET,
-            {expiresIn: 36000000},
+            { expiresIn: 36000000 },
             (err, token) => {
-            if (err) throw err;
-            res.json({token}).status(200)
+                if (err) {
+                    console.log('Error generating JWT:', err);
+                    return res.json({ "message": "You are not logged in" }).status(400);
+                }
+                res.json({ token }).status(200)
             }
         )
-        }
-        catch(err){
-        console.log(err);
-        res.json({"message": "You are not loggedin"}).status(400);
-        }
+    } catch (err) {
+        console.log('Error in signin process:', err);
+        res.json({ "message": "You are not logged in" }).status(400);
+    }
 }

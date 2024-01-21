@@ -15,6 +15,18 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Routes
+const userRoute = require('./routes/user');
+const reviewRoute = require('./routes/review');
+const requestRoute = require('./routes/request');
+const libraryRoute = require('./routes/library');
+const authRoute = require('./routes/auth')
+
+
+app.use('/user', userRoute);
+app.use('/review', reviewRoute);
+app.use('/request', requestRoute);
+app.use('/library', libraryRoute);
+app.use('/auth', authRoute);
 
 
 // start listening to requests coming from the PORT
