@@ -12,7 +12,6 @@ exports.book_create_post = async (req, res) => {
         if (images.length > 0) {
             const imagesPath = await uploadCloudinary.uploadMultiple(images);
             imagesPath.forEach(pathImg => pathDb.push(pathImg));
-            images.forEach(remove => fs.unlinkSync(remove));
         }
 
         book.image = pathDb;
@@ -32,6 +31,7 @@ exports.book_create_post = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 exports.book_index_get = (req, res) => {
     Book.find().populate('category')

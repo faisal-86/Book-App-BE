@@ -12,13 +12,6 @@ exports.category_create_post = async (req, res) => {
         try {
             let imagePath = await uploadCloudinary.uploadSingle(image);
             category.image = imagePath.url;
-            fs.unlink(image, (err) => {
-                if (err) {
-                    console.error('Error deleting local file:', err);
-                } else {
-                    console.log('Local file deleted after Cloudinary upload.');
-                }
-            });
         } catch (err) {
             console.log('Error uploading image to Cloudinary:', err);
             return res.status(500).send("Error uploading image. Please try again later.");
@@ -33,6 +26,7 @@ exports.category_create_post = async (req, res) => {
         res.status(500).send("Error saving category. Please try again later.");
     }
 };
+
 
 
 exports.category_index_get = (req, res) => {
