@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Library = require('../models/Library');
 
 
 
@@ -38,17 +39,25 @@ exports.user_update_post = (req, res) => {
 
 // Get books in users library
 exports.user_library_get = (req, res) => {
-    User.findById(req.user.id)
-        .populate('library')  
-        .then((user) => {
-            console.log('Fetching user library...');
-            res.json({ library: user.library });
-        })
-        .catch((err) => {
-            console.log('Error getting user library');
-            console.log(err);
-            res.json({ message: err.message }).status(404);
-        });
+    // Check if req.user exists and has an 'id' property
+    if (req.user && req.user.id) {
+        User.findById(req.user.id)
+            .populate('library')  
+            .then((user) => {
+                console.log('Fetching user library...');
+                res.json({ library: user.library });
+            })
+            .catch((err) => {
+                console.log('Error getting user library');
+                console.log(err);
+                res.json({ message: err.message }).status(404);
+            });
+    } else {
+        // Handle case when req.user is not available
+        console.log('User not authenticated');
+        res.json({ message: 'User not authenticated' }).status(401);
+    }
 };
+
 
 

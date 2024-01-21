@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/category');
 
+router.use(express.json());
+
+
 // Route to create a new category
 router.post('/create', categoryController.category_create_post);
 
