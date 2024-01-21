@@ -30,6 +30,7 @@ const userSchema = mongoose.Schema({
     },
 
    
+    
 
     "avatar": String
 }, {

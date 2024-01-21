@@ -23,14 +23,36 @@ const handleErrorResponse = (res, err, statusCode = 400) => {
 exports.add_to_library_post = async (req, res) => {
     try {
         console.log('Request Body:', req.body); // Log the entire request body
-        const user = await User.findByIdAndUpdate(
+
+        // Check if the user with the specified id exists
+        const existingUser = await User.findById(req.user.id);
+        if (!existingUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if the book with the specified id exists
+        const existingBook = await Book.findById(req.body.book);
+        if (!existingBook) {
+            return res.status(404).json({ message: 'Book not found' });
+        }
+
+        // Update the user's library
+        const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             { $addToSet: { library: req.body.book } },
             { new: true }
         );
 
         console.log(`Book ${req.body.book} added to user ${req.user.id}'s library`);
-        res.json({ library: user.library });
+
+        // Update the Library model as well
+        await Library.findOneAndUpdate(
+            { user: req.user.id },
+            { $addToSet: { book: req.body.book } },
+            { upsert: true }
+        );
+
+        res.json({ library: updatedUser.library });
     } catch (err) {
         handleErrorResponse(res, err);
     }
@@ -42,11 +64,11 @@ exports.remove_from_library_post = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
             req.user.id,
-            { $pull: { library: req.body.bookId } },
+            { $pull: { library: req.body.book } },
             { new: true }
         );
 
-        console.log(`Book ${req.body.bookId} removed from user ${req.user.id}'s library`);
+        console.log(`Book ${req.body.book} removed from user ${req.user.id}'s library`);
         res.json({ library: user.library });
     } catch (err) {
         handleErrorResponse(res, err);
