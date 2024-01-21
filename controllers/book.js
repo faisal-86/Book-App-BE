@@ -6,13 +6,13 @@ const uploadCloudinary = require('../helper/cloudUploader');
 exports.book_create_post = async (req, res) => {
     try {
         let book = new Book(req.body);
-        let images = req.files ? req.files.map(file => `public/images/${file.filename}`) : [];
+        let images = req.files ? req.files.map(file => `./public/uploads/${file.filename}`) : [];
         let pathDb = [];
 
         if (images.length > 0) {
-            const imagesPath = await uploadCloudinary.upload_multiple(images);
-            imagesPath.forEach(pathImg => pathDb.push(pathImg.url));
-            images.forEach(remove => fs.unlinkSync(remove)); // Using synchronous unlink for simplicity
+            const imagesPath = await uploadCloudinary.uploadMultiple(images);
+            imagesPath.forEach(pathImg => pathDb.push(pathImg));
+            images.forEach(remove => fs.unlinkSync(remove));
         }
 
         book.image = pathDb;
@@ -21,7 +21,7 @@ exports.book_create_post = async (req, res) => {
         if (req.body.category) {
             const category = await Category.findById(req.body.category);
             if (category) {
-                category.book.push(newBook._id); // Make sure to push the book ID
+                category.book.push(newBook._id);
                 await category.save();
             }
         }

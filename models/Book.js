@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Book Schema
 const bookSchema = mongoose.Schema({
     "title": {
         type: String,
@@ -13,22 +12,21 @@ const bookSchema = mongoose.Schema({
     "description": String,
     "isbn": String,
     "publish_date": Date,
-    "image": [String], // Array of strings for images
-
+    "image": [String],
     "category": {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required: false // Make it optional
+        required: false
     },
     "library": {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Library',
-        required: false // Make it optional
+        required: false
     },
     "review": {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review',
-        required: false // Make it optional
+        required: false
     },
 }, {
     timestamps: true
@@ -36,5 +34,4 @@ const bookSchema = mongoose.Schema({
 
 const Book = mongoose.model("Book", bookSchema);
 
-// Export
 module.exports = Book;
