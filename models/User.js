@@ -29,14 +29,7 @@ const userSchema = mongoose.Schema({
         default: 'guest'
     },
 
-    "book": {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Book'
-    },
-    "library": {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Library'
-    },
+   
 
     "avatar": String
 }, {
