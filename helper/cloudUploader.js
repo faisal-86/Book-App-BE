@@ -2,7 +2,6 @@ require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
-// Cloudinary configuration is automatically set from CLOUDINARY_URL in .env
 cloudinary.config();
 
 exports.uploadSingle = async (filePath) => {
