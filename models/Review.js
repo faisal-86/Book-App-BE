@@ -10,7 +10,7 @@ const reviewSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
     },
-    "title" : String,
+    
     "comment" : String,
     "rating" : Number
 },

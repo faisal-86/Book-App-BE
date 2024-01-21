@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 const requestSchema = mongoose.Schema({
     "book":{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Book'
+        ref:'Book',
+        required: true
     },
     "user":{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        required: true
     },
 
     "description" : String,
@@ -21,4 +23,4 @@ const requestSchema = mongoose.Schema({
 const Request = mongoose.model("Request", requestSchema);
 
 // Export
-module.exports = User;
+module.exports = Request;
