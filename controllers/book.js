@@ -1,85 +1,59 @@
-const {Book} = require('../models/Book');
-const {Category} = require('../models/Category');
+const Book = require('../models/Book');
+const Category = require('../models/Category');
 const fs = require("fs");
 const uploadCloudinary = require('../helper/cloudUploader');
 
-
 exports.book_create_post = async (req, res) => {
-    let book = new Book(req.body)
-    let images;
-    console.log("fffffff")
-    console.log(req)
-    if (req.files) {
-        images = req.files.map(file => `public/images/${file.filename}`);
-    } else {
-        images = [];
-    }
-    console.log(images)
-    let pathDb = [];
-    await uploadCloudinary.upload_multiple(images)
-        .then((imagesPath)=>{
-        //     console.log("this is the log from Cloud")
-        imagesPath.forEach(pathImg =>{
-            console.log(pathImg.url)
-            pathDb.push(pathImg.url);
-        })
-        console.log(pathDb)
+    try {
+        let book = new Book(req.body);
+        let images = req.files ? req.files.map(file => `public/images/${file.filename}`) : [];
+        let pathDb = [];
+
+        if (images.length > 0) {
+            const imagesPath = await uploadCloudinary.upload_multiple(images);
+            imagesPath.forEach(pathImg => pathDb.push(pathImg.url));
+            images.forEach(remove => fs.unlinkSync(remove)); // Using synchronous unlink for simplicity
+        }
+
         book.image = pathDb;
-        book.save()
-        .then(newBook =>{
-            images.forEach(remove =>{
-                // To remove the image from public/images and store it in cloudinary only
-                fs.unlink(remove, (err) => {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        console.log('File is deleted.');
-                    }
-                    });    
-            })
-                Category.findById(req.body.category)
-                .then((category) => {
-                    category.book.push(book);
-                    category.save();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+        const newBook = await book.save();
 
-    
-            res.json(newBook)
-        })
-        })
-        .catch((err)=>{
-            console.log(err)
-        })    
+        if (req.body.category) {
+            const category = await Category.findById(req.body.category);
+            if (category) {
+                category.book.push(newBook._id); // Make sure to push the book ID
+                await category.save();
+            }
+        }
 
-}  
-
-
+        res.json(newBook);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 exports.book_index_get = (req, res) => {
     Book.find().populate('category')
-    .then((book) => {
-        res.json({ book })
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+        .then(books => {
+            res.json({ books });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error retrieving books');
+        });
+};
 
-}
-
-
-exports.get_mybook_get = (req, res) =>{
-    Book.find({user:req.query.user})
-    .then(myBooks =>{
-        res.json(myBooks);
-    })
-    .catch(err =>{
-        console.log(err);
-    })
-}
-
+exports.get_mybook_get = (req, res) => {
+    Book.find({ user: req.query.user })
+        .then(myBooks => {
+            res.json(myBooks);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error retrieving user books');
+        });
+};
 
 exports.book_edit_post = async (req, res) => {
     console.log(req.body)
@@ -144,25 +118,24 @@ exports.book_edit_post = async (req, res) => {
     
 }
 
-
 exports.book_delete_get = (req, res) => {
-    console.log(req.query.id);
     Book.findByIdAndDelete(req.query.id)
-    .then((book) => {
-        res.json({ book });
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-}
-
+        .then(book => {
+            res.json({ book });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error deleting book');
+        });
+};
 
 exports.book_detail_get = (req, res) => {
     Book.findById(req.query.id).populate('category')
-    .then((book) => {
-        res.json({book})
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-}
+        .then(book => {
+            res.json({ book });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error retrieving book details');
+        });
+};
