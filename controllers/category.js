@@ -1,28 +1,26 @@
 const Category = require('../models/Category');
-const Book = require('../models/Book');
-const fs = require("fs");
 const uploadCloudinary = require('../helper/cloudUploader');
+const fs = require('fs');
 
 
 exports.category_create_post = async (req, res) => {
-    console.log(req.body); // Add this line to log the request body
+    console.log(req.body);
     let category = new Category(req.body);
 
     if (req.file) {
-        let image = `public/images/${req.file.filename}`;
+        let image = `./public/uploads/${req.file.filename}`;
         try {
-            let imagePath = await uploadCloudinary.upload_single(image);
+            let imagePath = await uploadCloudinary.uploadSingle(image);
             category.image = imagePath.url;
-
             fs.unlink(image, (err) => {
                 if (err) {
-                    console.error(err);
+                    console.error('Error deleting local file:', err);
                 } else {
                     console.log('Local file deleted after Cloudinary upload.');
                 }
             });
         } catch (err) {
-            console.log(err);
+            console.log('Error uploading image to Cloudinary:', err);
             return res.status(500).send("Error uploading image. Please try again later.");
         }
     }
@@ -31,7 +29,7 @@ exports.category_create_post = async (req, res) => {
         let savedCategory = await category.save();
         res.json({ category: savedCategory });
     } catch (err) {
-        console.log(err);
+        console.log('Error saving category:', err);
         res.status(500).send("Error saving category. Please try again later.");
     }
 };
