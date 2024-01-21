@@ -22,18 +22,20 @@ const handleErrorResponse = (res, err, statusCode = 400) => {
 // Controller to add a book to the user's library
 exports.add_to_library_post = async (req, res) => {
     try {
+        console.log('Request Body:', req.body); // Log the entire request body
         const user = await User.findByIdAndUpdate(
             req.user.id,
-            { $addToSet: { library: req.body.bookId } },
+            { $addToSet: { library: req.body.book } },
             { new: true }
         );
 
-        console.log(`Book ${req.body.bookId} added to user ${req.user.id}'s library`);
+        console.log(`Book ${req.body.book} added to user ${req.user.id}'s library`);
         res.json({ library: user.library });
     } catch (err) {
         handleErrorResponse(res, err);
     }
 };
+
 
 // Controller to remove a book from the user's library
 exports.remove_from_library_post = async (req, res) => {
