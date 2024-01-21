@@ -5,6 +5,7 @@ const uploadCloudinary = require('../helper/cloudUploader');
 
 
 exports.category_create_post = async (req, res) => {
+    console.log(req.body); // Add this line to log the request body
     let category = new Category(req.body);
 
     if (req.file) {
