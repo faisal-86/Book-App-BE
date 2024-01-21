@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/category');
+const upload = require('../helper/multerUploader');
 
 router.use(express.json());
 
 
 // Route to create a new category
-router.post('/create', categoryController.category_create_post);
+// router.post('/create', categoryController.category_create_post);
+router.post('/create', upload.single('image'), categoryController.category_create_post);
 
 // Route to get all categories
 router.get('/index', categoryController.category_index_get);
