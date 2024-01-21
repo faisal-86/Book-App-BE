@@ -19,7 +19,9 @@ const userRoute = require('./routes/user');
 const reviewRoute = require('./routes/review');
 const requestRoute = require('./routes/request');
 const libraryRoute = require('./routes/library');
-const authRoute = require('./routes/auth')
+const authRoute = require('./routes/auth');
+const categoryRoute = require('./routes/category');
+const bookRoute = require('./routes/book');
 
 
 app.use('/user', userRoute);
@@ -27,6 +29,8 @@ app.use('/review', reviewRoute);
 app.use('/request', requestRoute);
 app.use('/library', libraryRoute);
 app.use('/auth', authRoute);
+app.use('/category', categoryRoute);
+app.use('/book', bookRoute);
 
 
 // start listening to requests coming from the PORT
