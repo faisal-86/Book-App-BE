@@ -18,9 +18,11 @@ router.get('/book/:bookId', isLoggedIn, reviewController.book_reviews_get);
 
 
 // Route to update a book review
-router.post('/update',isLoggedIn, reviewController.update_review_post);
+// router.post('/update',isLoggedIn, reviewController.update_review_post);
+router.post('/update/:review', isLoggedIn, reviewController.update_review_post);
+
 
 // Route to delete a book review
-router.post('/delete/:reviewId',isLoggedIn,  reviewController.delete_review_post);
+router.post('/delete/:review', isLoggedIn, reviewController.delete_review);
 
 module.exports = router;

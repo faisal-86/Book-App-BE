@@ -51,7 +51,24 @@ exports.book_reviews_get = async (req, res) => {
 };
 
 // Controller to update a book review
+// exports.update_review_post = async (req, res) => {
+//     try {
+//         const updatedReview = await Review.findByIdAndUpdate(
+//             req.params.review,
+//             { rating: req.body.rating, comment: req.body.comment },
+//             { new: true }
+//         );
+
+//         console.log(`Review ${req.params.review} updated`);
+//         res.json({ review: updatedReview });
+//     } catch (err) {
+//         handleErrorResponse(res, err);
+//     }
+// };
+
+
 exports.update_review_post = async (req, res) => {
+    console.log(req.params); // Log the params
     try {
         const updatedReview = await Review.findByIdAndUpdate(
             req.params.review,
@@ -66,10 +83,30 @@ exports.update_review_post = async (req, res) => {
     }
 };
 
+
+
+
 // Controller to delete a book review
-exports.delete_review_post = async (req, res) => {
+// exports.delete_review_post = async (req, res) => {
+//     try {
+//         await Review.findByIdAndDelete(req.params.review);
+
+//         console.log(`Review ${req.params.review} deleted`);
+//         res.json({ message: 'Review deleted successfully' });
+//     } catch (err) {
+//         handleErrorResponse(res, err);
+//     }
+// };
+
+
+exports.delete_review = async (req, res) => {
     try {
-        await Review.findByIdAndDelete(req.params.review);
+        // Find and delete the review
+        const deletedReview = await Review.findByIdAndDelete(req.params.review);
+
+        if (!deletedReview) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
 
         console.log(`Review ${req.params.review} deleted`);
         res.json({ message: 'Review deleted successfully' });
