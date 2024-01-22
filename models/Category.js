@@ -6,10 +6,6 @@ const categorySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    "book": [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Book'
-    }],
     "image": String
 }, {
     timestamps: true
