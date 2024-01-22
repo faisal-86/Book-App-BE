@@ -12,5 +12,6 @@ router.get('/mybooks', bookController.get_mybook_get);
 router.post('/edit', upload.array('file'), bookController.book_edit_post);
 router.get('/delete', bookController.book_delete_get);
 router.get('/detail', bookController.book_detail_get);
-
+// GET /byCategory
+router.get('/byCategory', bookController.book_getByCategory_get);
 module.exports = router;

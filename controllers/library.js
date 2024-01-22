@@ -78,7 +78,7 @@ exports.add_to_library_post = async (req, res) => {
   
 
 exports.remove_book_from_library = async (req, res) => {
-    const { bookId } = req.body;
+    const { book } = req.body;
 
     try {
         // Find the user's library
@@ -89,14 +89,10 @@ exports.remove_book_from_library = async (req, res) => {
         }
 
         // Remove the book from the library
-        library.book.pull(bookId);
+        library.book.pull(book);
 
         // Save the updated library
         await library.save();
-
-        // Optionally, you can update the user's library array in the User model
-        // This step depends on your data model and requirements
-        // const user = await User.findByIdAndUpdate(req.user.id, { $pull: { library: bookId } }, { new: true });
 
         res.json({ library: library.book });
     } catch (err) {

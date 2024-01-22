@@ -13,12 +13,12 @@ exports.submit_review_post = async (req, res) => {
     try {
         const newReview = await Review.create({
             user: req.user.id,
-            book: req.body.bookId,
+            book: req.body.book,
             rating: req.body.rating,
             comment: req.body.comment
         });
 
-        console.log(`Review submitted by user ${req.user.id} for book ${req.body.bookId}`);
+        console.log(`Review submitted by user ${req.user.id} for book ${req.body.book}`);
         res.json({ review: newReview });
     } catch (err) {
         handleErrorResponse(res, err);
@@ -28,9 +28,9 @@ exports.submit_review_post = async (req, res) => {
 // Controller to get book reviews
 exports.book_reviews_get = async (req, res) => {
     try {
-        const reviews = await Review.find({ book: req.params.bookId }).populate('user', 'username');
+        const reviews = await Review.find({ book: req.params.book}).populate('user');
 
-        console.log(`Fetching reviews for book ${req.params.bookId}`);
+        console.log(`Fetching reviews for book ${req.params.book}`);
         res.json({ reviews });
     } catch (err) {
         handleErrorResponse(res, err, 404);
@@ -41,12 +41,12 @@ exports.book_reviews_get = async (req, res) => {
 exports.update_review_post = async (req, res) => {
     try {
         const updatedReview = await Review.findByIdAndUpdate(
-            req.params.reviewId,
+            req.params.review,
             { rating: req.body.rating, comment: req.body.comment },
             { new: true }
         );
 
-        console.log(`Review ${req.params.reviewId} updated`);
+        console.log(`Review ${req.params.review} updated`);
         res.json({ review: updatedReview });
     } catch (err) {
         handleErrorResponse(res, err);
@@ -56,9 +56,9 @@ exports.update_review_post = async (req, res) => {
 // Controller to delete a book review
 exports.delete_review_post = async (req, res) => {
     try {
-        await Review.findByIdAndDelete(req.params.reviewId);
+        await Review.findByIdAndDelete(req.params.review);
 
-        console.log(`Review ${req.params.reviewId} deleted`);
+        console.log(`Review ${req.params.review} deleted`);
         res.json({ message: 'Review deleted successfully' });
     } catch (err) {
         handleErrorResponse(res, err);
