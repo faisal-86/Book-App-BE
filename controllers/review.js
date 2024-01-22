@@ -26,11 +26,24 @@ exports.submit_review_post = async (req, res) => {
 };
 
 // Controller to get book reviews
+// exports.book_reviews_get = async (req, res) => {
+//     try {
+//         const reviews = await Review.find({ book: req.params.book}).populate('user');
+
+//         console.log(`Fetching reviews for book ${req.params.book}`);
+//         res.json({ reviews });
+//     } catch (err) {
+//         handleErrorResponse(res, err, 404);
+//     }
+// };
+
 exports.book_reviews_get = async (req, res) => {
     try {
-        const reviews = await Review.find({ book: req.params.book}).populate('user');
+        const bookId = req.params.bookId;
+        // Update the fields to include the first and last name of the user
+        const reviews = await Review.find({ book: bookId }).populate('user', 'firstName lastName');
 
-        console.log(`Fetching reviews for book ${req.params.book}`);
+        console.log(`Fetching reviews for book ${bookId}`);
         res.json({ reviews });
     } catch (err) {
         handleErrorResponse(res, err, 404);
