@@ -3,6 +3,7 @@ const Library = require('../models/Library');
 
 
 
+
 exports.user_detail_get = (req, res) => {
     // get the user id
     console.log(`user details request`);
@@ -10,7 +11,7 @@ exports.user_detail_get = (req, res) => {
     User.findById(req.query.id)
     .then((user) => {
         console.log('Fetching user data..');
-        // remove user password from the data do i need to remove the ID as well?
+        // remove user password from the data 
         user.password = '';
         res.json({user});
     })
@@ -22,20 +23,33 @@ exports.user_detail_get = (req, res) => {
 }
 
 
+
+
+
 exports.user_update_post = (req, res) => {
-    console.log('updating user...' + req.user.id)
-    console.log(req.body)
-    User.findByIdAndUpdate(req.user.id, req.body, {new: true})
-    .then(user => {
-        console.log(`updating user ${req.user.id} details`);
-        res.json({user});
-    })
-    .catch(err => {
-        console.log(`Error updating user profile ${req.user.id}`);
-        console.log(err);
-        res.json({err}).status(400);
-    })
-}
+    console.log('Updating user...' + req.user.id);
+    console.log('Request Body:', req.body);
+
+    User.findByIdAndUpdate(req.user.id, req.body, { new: true })
+        .then(updatedUser => {
+            if (!updatedUser) {
+                console.log(`User with ID ${req.user.id} not found`);
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            console.log(`User ${req.user.id} details updated`);
+            console.log('Updated User:', updatedUser);
+
+            res.json({ user: updatedUser });
+        })
+        .catch(err => {
+            console.log(`Error updating user profile ${req.user.id}`);
+            console.error(err); // Log the error for debugging
+            res.status(500).json({ message: 'Internal Server Error' });
+        });
+};
+
+
 
 // Get books in users library
 exports.user_library_get = (req, res) => {

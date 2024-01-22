@@ -8,10 +8,11 @@ router.use(express.json());
 
 
 // Route to get user details
-router.get('/index/:id', userController.user_detail_get);
+router.get('/detail', isLoggedIn, userController.user_detail_get);
+
 
 // Route to update user details
-router.post('/update',  userController.user_update_post);
+router.post('/update',isLoggedIn, userController.user_update_post);
 
 // Route to get user's library
 router.get('/library', isLoggedIn,  userController.user_library_get);
