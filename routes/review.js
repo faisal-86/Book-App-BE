@@ -10,7 +10,7 @@ router.use(express.json());
 router.post('/submit',isLoggedIn, reviewController.submit_review_post);
 
 // Route to get book reviews
-router.get('/book',isLoggedIn, reviewController.book_reviews_get);
+router.get('/book', reviewController.book_reviews_get);
 
 // Route to update a book review
 router.post('/update',isLoggedIn, reviewController.update_review_post);
