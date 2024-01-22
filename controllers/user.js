@@ -44,20 +44,30 @@ exports.user_library_get = (req, res) => {
         User.findById(req.user.id)
             .populate('library')  
             .then((user) => {
+                // Check if the user is found
+                if (!user) {
+                    console.log('User not found');
+                    return res.status(404).json({ message: 'User not found' });
+                }
+
                 console.log('Fetching user library...');
+                console.log('User:', user); // Log the user object
+                console.log('User Library:', user.library); // Log the user's library
+
                 res.json({ library: user.library });
             })
             .catch((err) => {
                 console.log('Error getting user library');
                 console.log(err);
-                res.json({ message: err.message }).status(404);
+                res.status(500).json({ message: 'Internal Server Error' });
             });
     } else {
         // Handle case when req.user is not available
         console.log('User not authenticated');
-        res.json({ message: 'User not authenticated' }).status(401);
+        res.status(401).json({ message: 'User not authenticated' });
     }
 };
+
 
 
 
