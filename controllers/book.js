@@ -33,27 +33,27 @@ exports.book_create_post = async (req, res) => {
 };
 
 
-exports.book_index_get = (req, res) => {
-    Book.find().populate('category')
-        .then(books => {
-            res.json({ books });
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Error retrieving books');
-        });
-};
+// exports.book_index_get = (req, res) => {
+//     Book.find().populate('category')
+//         .then(books => {
+//             res.json({ books });
+//         })
+//         .catch(err => {
+//             console.error(err);
+//             res.status(500).send('Error retrieving books');
+//         });
+// };
 
-exports.get_mybook_get = (req, res) => {
-    Book.find({ user: req.query.user })
-        .then(myBooks => {
-            res.json(myBooks);
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Error retrieving user books');
-        });
-};
+// exports.get_mybook_get = (req, res) => {
+//     Book.find({ user: req.query.user })
+//         .then(myBooks => {
+//             res.json(myBooks);
+//         })
+//         .catch(err => {
+//             console.error(err);
+//             res.status(500).send('Error retrieving user books');
+//         });
+// };
 
 exports.book_edit_post = async (req, res) => {
     console.log(req.body)
