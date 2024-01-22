@@ -8,16 +8,7 @@ const handleErrorResponse = (res, err, statusCode = 400) => {
     res.json({ message: err.message }).status(statusCode);
 };
 
-// Controller to get the user's library
-// exports.user_library_get = async (req, res) => {
-//     try {
-//         const user = await User.findById(req.user.id).populate('library');
-//         console.log('Fetching user library...');
-//         res.json({ library: user.library });
-//     } catch (err) {
-//         handleErrorResponse(res, err, 404);
-//     }
-// };
+
 
 // Controller to add a book to the user's library
 exports.add_to_library_post = async (req, res) => {
