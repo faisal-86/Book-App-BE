@@ -28,10 +28,12 @@ const userSchema = mongoose.Schema({
         enum: ['admin', 'user', 'guest'],
         default: 'guest'
     },
+    "library": [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Library'
+    }],
 
-   
-    
-
+ 
     "avatar": String
 }, {
     timestamps: true
