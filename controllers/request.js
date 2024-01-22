@@ -1,6 +1,6 @@
+// controllers/request.js
+
 const Request = require('../models/Request');
-const User = require('../models/User');
-const Book = require('../models/Book');
 
 // Helper function to handle errors
 const handleErrorResponse = (res, err, statusCode = 400) => {
@@ -12,13 +12,14 @@ const handleErrorResponse = (res, err, statusCode = 400) => {
 exports.submit_request_post = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { bookId, description } = req.body;
+        const { bookTitle, bookAuthor, description } = req.body;
 
         const newRequest = await Request.create({
             user: userId,
-            book: bookId,
+            bookTitle,
+            bookAuthor,
             description,
-            approval: false
+            approvalStatus: false
         });
 
         console.log(`Book request submitted by user ${userId}: ${newRequest._id}`);
@@ -33,7 +34,7 @@ exports.user_requests_get = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const requests = await Request.find({ user: userId }).populate('book', 'title author');
+        const requests = await Request.find({ user: userId }).select('-updatedAt').populate('book', 'title author');
 
         console.log(`Fetching book requests for user ${userId}`);
         res.json({ requests });
@@ -58,11 +59,11 @@ exports.all_requests_get = async (req, res) => {
 exports.update_request_status_post = async (req, res) => {
     try {
         const requestId = req.params.requestId;
-        const { approval } = req.body;
+        const { approvalStatus } = req.body;
 
-        const updatedRequest = await Request.findByIdAndUpdate(requestId, { approval }, { new: true });
+        const updatedRequest = await Request.findByIdAndUpdate(requestId, { approvalStatus }, { new: true });
 
-        console.log(`Book request ${requestId} approval status updated to ${approval}`);
+        console.log(`Book request ${requestId} approval status updated to ${approvalStatus}`);
         res.json({ request: updatedRequest });
     } catch (err) {
         handleErrorResponse(res, err);
