@@ -1,5 +1,6 @@
 const Book = require('../models/Book');
 const Category = require('../models/Category');
+const Library = require('../models/Library'); // Import the Library model
 const fs = require("fs");
 const uploadCloudinary = require('../helper/cloudUploader');
 const { uploadMultiple } = require('../helper/cloudUploader'); // Adjust the path as necessary
@@ -253,18 +254,68 @@ exports.book_edit_post = async (req, res) => {
 //         });
 // };
 
+// exports.book_delete_get = async (req, res) => {
+//     try {
+//         const book = await Book.findByIdAndDelete(req.params.id);
+//         if (!book) {
+//             return res.status(404).send('Book not found');
+//         }
+//         res.json({ message: 'Book successfully deleted', book });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Error deleting book');
+//     }
+// };
+
+
+// exports.book_delete_get = async (req, res) => {
+//     try {
+//         const bookId = req.params.id;
+//         const book = await Book.findById(bookId);
+//         if (!book) {
+//             return res.status(404).send('Book not found');
+//         }
+
+//         // Delete the book from all libraries
+//         await Library.updateMany(
+//             { book: bookId },
+//             { $pull: { book: bookId } }
+//         );
+
+//         // Delete the book from the database
+//         await book.remove();
+
+//         res.json({ message: 'Book successfully deleted', book });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Error deleting book');
+//     }
+// };
+
+
 exports.book_delete_get = async (req, res) => {
     try {
-        const book = await Book.findByIdAndDelete(req.params.id);
-        if (!book) {
+        const bookId = req.params.id;
+
+        // Delete the book from all libraries
+        await Library.updateMany(
+            { book: bookId },
+            { $pull: { book: bookId } }
+        );
+
+        // Delete the book from the database
+        const deletedBook = await Book.findByIdAndDelete(bookId);
+        if (!deletedBook) {
             return res.status(404).send('Book not found');
         }
-        res.json({ message: 'Book successfully deleted', book });
+
+        res.json({ message: 'Book successfully deleted', deletedBook });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error deleting book');
     }
 };
+
 
 
 exports.book_detail_get = (req, res) => {
