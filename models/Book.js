@@ -18,16 +18,10 @@ const bookSchema = mongoose.Schema({
         ref: 'Category',
         required: false
     },
-    "library": {
+    "reviews": [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Library',
-        required: false
-    },
-    "review": {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review',
-        required: false
-    },
+        ref: 'Review'
+    }]
 }, {
     timestamps: true
 });
