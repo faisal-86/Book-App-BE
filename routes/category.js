@@ -17,7 +17,13 @@ router.get('/index', categoryController.category_index_get);
 router.post('/edit/:id', categoryController.category_edit_post);
 
 // Route to delete a category
-router.get('/delete', categoryController.category_delete_get);
+// router.get('/delete', categoryController.category_delete_get);
+
+// Route to delete a category
+router.delete('/delete/:id', categoryController.category_delete_get);
+
+
+
 
 // Route to get details of a specific category
 router.get('/detail', categoryController.category_detail_get);
