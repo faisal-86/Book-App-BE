@@ -4,22 +4,17 @@ const Library = require('../models/Library'); // Import the Library model
 const fs = require("fs");
 const uploadCloudinary = require('../helper/cloudUploader');
 const { uploadMultiple } = require('../helper/cloudUploader'); // Adjust the path as necessary
-
-
 // exports.book_create_post = async (req, res) => {
 //     try {
 //         let book = new Book(req.body);
 //         let images = req.files ? req.files.map(file => `./public/uploads/${file.filename}`) : [];
 //         let pathDb = [];
-
 //         if (images.length > 0) {
 //             const imagesPath = await uploadCloudinary.uploadMultiple(images);
 //             imagesPath.forEach(pathImg => pathDb.push(pathImg));
 //         }
-
 //         book.image = pathDb;
 //         const newBook = await book.save();
-
 //         if (req.body.category) {
 //             const category = await Category.findById(req.body.category);
 //             if (category) {
@@ -27,29 +22,23 @@ const { uploadMultiple } = require('../helper/cloudUploader'); // Adjust the pat
 //                 await category.save();
 //             }
 //         }
-
 //         res.json(newBook);
 //     } catch (err) {
 //         console.error(err);
 //         res.status(500).send('Internal Server Error');
 //     }
 // };
-
-
 exports.book_create_post = async (req, res) => {
     try {
         let book = new Book(req.body);
         let images = req.files ? req.files.map(file => `./public/uploads/${file.filename}`) : [];
         let pathDb = [];
-
         if (images.length > 0) {
             const imagesPath = await uploadMultiple(images);
             imagesPath.forEach(pathImg => pathDb.push(pathImg));
         }
-
         book.image = pathDb;
         const newBook = await book.save();
-
         if (req.body.category) {
             const category = await Category.findById(req.body.category);
             if (category) {
@@ -61,37 +50,32 @@ exports.book_create_post = async (req, res) => {
                 console.log('Category not found for ID:', req.body.category);
             }
         }
-
         res.json(newBook);
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
 };
-
-
-// exports.book_index_get = (req, res) => {
-//     Book.find().populate('category')
-//         .then(books => {
-//             res.json({ books });
-//         })
-//         .catch(err => {
-//             console.error(err);
-//             res.status(500).send('Error retrieving books');
-//         });
-// };
-
-// exports.get_mybook_get = (req, res) => {
-//     Book.find({ user: req.query.user })
-//         .then(myBooks => {
-//             res.json(myBooks);
-//         })
-//         .catch(err => {
-//             console.error(err);
-//             res.status(500).send('Error retrieving user books');
-//         });
-// };
-
+exports.book_index_get = (req, res) => {
+    Book.find().populate('category')
+        .then(books => {
+            res.json({ books });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error retrieving books');
+        });
+};
+exports.get_mybook_get = (req, res) => {
+    Book.find({ user: req.query.user })
+        .then(myBooks => {
+            res.json(myBooks);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error retrieving user books');
+        });
+};
 // exports.book_edit_post = async (req, res) => {
 //     console.log(req.body)
 //     if(req.files && req.files.length != 0){
@@ -112,7 +96,7 @@ exports.book_create_post = async (req, res) => {
 //                     } else {
 //                         console.log('File is deleted.');
 //                     }
-//                     });    
+//                     });
 //             })
 //             Category.findById(req.body.category)
 //             .then((category) => {
@@ -138,8 +122,7 @@ exports.book_create_post = async (req, res) => {
 //         })
 //         .catch((err) =>{
 //             console.log(err);
-//         })    
-    
+//         })
 //     }
 //     else{
 //         console.log('not image')
@@ -151,30 +134,23 @@ exports.book_create_post = async (req, res) => {
 //         .catch((err)=>{
 //             console.log(err)
 //         })
-//         } 
-    
+//         }
 // }
-
-
 // exports.book_edit_post = async (req, res) => {
 //     const bookId = req.params.book; // Get the book ID from URL parameter
-
 //     try {
 //         // Fetch the current book data from the database
 //         const currentBook = await Book.findById(bookId);
 //         if (!currentBook) {
 //             return res.status(404).send('Book not found');
 //         }
-
 //         let updateData = {};
-
 //         // Compare and update only the changed fields
 //         Object.keys(req.body).forEach(key => {
 //             if (req.body[key] !== currentBook[key]) {
 //                 updateData[key] = req.body[key];
 //             }
 //         });
-
 //         // Handle file upload if any files are provided
 //         if (req.files && req.files.length != 0) {
 //             let images = req.files.map(file => `public/images/${file.filename}`);
@@ -185,7 +161,6 @@ exports.book_create_post = async (req, res) => {
 //             });
 //             updateData.image = pathDb; // Update images
 //         }
-
 //         // If there are fields to update, proceed with the update
 //         if (Object.keys(updateData).length > 0) {
 //             const updatedBook = await Book.findByIdAndUpdate(bookId, updateData, { new: true });
@@ -193,30 +168,24 @@ exports.book_create_post = async (req, res) => {
 //         } else {
 //             res.json({ message: 'No fields were updated', book: currentBook });
 //         }
-
 //     } catch (err) {
 //         console.error(err);
 //         res.status(500).send('Internal Server Error');
 //     }
 // };
-
-
 exports.book_edit_post = async (req, res) => {
     const bookId = req.params.book;
-
     try {
         const currentBook = await Book.findById(bookId);
         if (!currentBook) {
             return res.status(404).send('Book not found');
         }
-
         let updateData = {};
         Object.keys(req.body).forEach(key => {
             if (req.body[key] !== currentBook[key]) {
                 updateData[key] = req.body[key];
             }
         });
-
         if (req.files && req.files.length != 0) {
             let images = req.files.map(file => `./public/uploads/${file.filename}`);
             try {
@@ -227,22 +196,17 @@ exports.book_edit_post = async (req, res) => {
                 return res.status(500).send('Error uploading images');
             }
         }
-        
-
         if (Object.keys(updateData).length > 0) {
             const updatedBook = await Book.findByIdAndUpdate(bookId, updateData, { new: true });
             res.json(updatedBook);
         } else {
             res.json({ message: 'No fields were updated', book: currentBook });
         }
-
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
 };
-
-
 // exports.book_delete_get = (req, res) => {
 //     Book.findByIdAndDelete(req.query.id)
 //         .then(book => {
@@ -253,7 +217,6 @@ exports.book_edit_post = async (req, res) => {
 //             res.status(500).send('Error deleting book');
 //         });
 // };
-
 // exports.book_delete_get = async (req, res) => {
 //     try {
 //         const book = await Book.findByIdAndDelete(req.params.id);
@@ -266,8 +229,6 @@ exports.book_edit_post = async (req, res) => {
 //         res.status(500).send('Error deleting book');
 //     }
 // };
-
-
 // exports.book_delete_get = async (req, res) => {
 //     try {
 //         const bookId = req.params.id;
@@ -275,49 +236,38 @@ exports.book_edit_post = async (req, res) => {
 //         if (!book) {
 //             return res.status(404).send('Book not found');
 //         }
-
 //         // Delete the book from all libraries
 //         await Library.updateMany(
 //             { book: bookId },
 //             { $pull: { book: bookId } }
 //         );
-
 //         // Delete the book from the database
 //         await book.remove();
-
 //         res.json({ message: 'Book successfully deleted', book });
 //     } catch (err) {
 //         console.error(err);
 //         res.status(500).send('Error deleting book');
 //     }
 // };
-
-
 exports.book_delete_get = async (req, res) => {
     try {
         const bookId = req.params.id;
-
         // Delete the book from all libraries
         await Library.updateMany(
             { book: bookId },
             { $pull: { book: bookId } }
         );
-
         // Delete the book from the database
         const deletedBook = await Book.findByIdAndDelete(bookId);
         if (!deletedBook) {
             return res.status(404).send('Book not found');
         }
-
         res.json({ message: 'Book successfully deleted', deletedBook });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error deleting book');
     }
 };
-
-
-
 exports.book_detail_get = (req, res) => {
     Book.findById(req.query.id).populate('category')
         .then(book => {
@@ -328,8 +278,6 @@ exports.book_detail_get = (req, res) => {
             res.status(500).send('Error retrieving book details');
         });
 };
-
-
 // Get all books by category
 exports.book_getByCategory_get = (req, res) => {
     const categoryId = req.query.id;
@@ -343,4 +291,3 @@ exports.book_getByCategory_get = (req, res) => {
             res.json({ err });
         });
 };
-
