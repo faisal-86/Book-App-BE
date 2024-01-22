@@ -5,6 +5,36 @@ const uploadCloudinary = require('../helper/cloudUploader');
 const { uploadMultiple } = require('../helper/cloudUploader'); // Adjust the path as necessary
 
 
+// exports.book_create_post = async (req, res) => {
+//     try {
+//         let book = new Book(req.body);
+//         let images = req.files ? req.files.map(file => `./public/uploads/${file.filename}`) : [];
+//         let pathDb = [];
+
+//         if (images.length > 0) {
+//             const imagesPath = await uploadCloudinary.uploadMultiple(images);
+//             imagesPath.forEach(pathImg => pathDb.push(pathImg));
+//         }
+
+//         book.image = pathDb;
+//         const newBook = await book.save();
+
+//         if (req.body.category) {
+//             const category = await Category.findById(req.body.category);
+//             if (category) {
+//                 category.book.push(newBook._id);
+//                 await category.save();
+//             }
+//         }
+
+//         res.json(newBook);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
+
 exports.book_create_post = async (req, res) => {
     try {
         let book = new Book(req.body);
@@ -12,7 +42,7 @@ exports.book_create_post = async (req, res) => {
         let pathDb = [];
 
         if (images.length > 0) {
-            const imagesPath = await uploadCloudinary.uploadMultiple(images);
+            const imagesPath = await uploadMultiple(images);
             imagesPath.forEach(pathImg => pathDb.push(pathImg));
         }
 
@@ -22,8 +52,12 @@ exports.book_create_post = async (req, res) => {
         if (req.body.category) {
             const category = await Category.findById(req.body.category);
             if (category) {
+                // Check if category is not null before pushing the book ID
+                category.book = category.book || [];
                 category.book.push(newBook._id);
                 await category.save();
+            } else {
+                console.log('Category not found for ID:', req.body.category);
             }
         }
 
@@ -208,16 +242,30 @@ exports.book_edit_post = async (req, res) => {
 };
 
 
-exports.book_delete_get = (req, res) => {
-    Book.findByIdAndDelete(req.query.id)
-        .then(book => {
-            res.json({ book });
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Error deleting book');
-        });
+// exports.book_delete_get = (req, res) => {
+//     Book.findByIdAndDelete(req.query.id)
+//         .then(book => {
+//             res.json({ book });
+//         })
+//         .catch(err => {
+//             console.error(err);
+//             res.status(500).send('Error deleting book');
+//         });
+// };
+
+exports.book_delete_get = async (req, res) => {
+    try {
+        const book = await Book.findByIdAndDelete(req.params.id);
+        if (!book) {
+            return res.status(404).send('Book not found');
+        }
+        res.json({ message: 'Book successfully deleted', book });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error deleting book');
+    }
 };
+
 
 exports.book_detail_get = (req, res) => {
     Book.findById(req.query.id).populate('category')
