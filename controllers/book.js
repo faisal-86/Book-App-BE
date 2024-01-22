@@ -139,3 +139,19 @@ exports.book_detail_get = (req, res) => {
             res.status(500).send('Error retrieving book details');
         });
 };
+
+
+// Get all books by category
+exports.book_getByCategory_get = (req, res) => {
+    const categoryId = req.query.id;
+    Product.find({ category: categoryId })
+        .then((books) => {
+            res.json({ books });
+        })
+        .catch((err) => {
+            console.log('Error getting books by category');
+            console.log(err);
+            res.json({ err });
+        });
+};
+

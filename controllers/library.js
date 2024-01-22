@@ -60,17 +60,43 @@ exports.add_to_library_post = async (req, res) => {
 
 
 // Controller to remove a book from the user's library
-exports.remove_from_library_post = async (req, res) => {
-    try {
-        const user = await User.findByIdAndUpdate(
-            req.user.id,
-            { $pull: { library: req.body.book } },
-            { new: true }
-        );
+// exports.remove_from_library_post = async (req, res) => {
+//     try {
+//       // Use req.body.user if you're passing the user ID in the request body
+//       const user = await User.findByIdAndUpdate(
+//         req.body.user,
+//         { $pull: { library: req.body.book } },
+//         { new: true }
+//       );
+  
+//       console.log(`Book ${req.body.book} removed from user ${user._id}'s library`);
+//       res.json({ library: user.library });
+//     } catch (err) {
+//       handleErrorResponse(res, err);
+//     }
+//   };
+  
 
-        console.log(`Book ${req.body.book} removed from user ${req.user.id}'s library`);
-        res.json({ library: user.library });
+exports.remove_book_from_library = async (req, res) => {
+    const { book } = req.body;
+
+    try {
+        // Find the user's library
+        const library = await Library.findOne({ user: req.user.id });
+
+        if (!library) {
+            return res.status(404).json({ message: 'User library not found' });
+        }
+
+        // Remove the book from the library
+        library.book.pull(book);
+
+        // Save the updated library
+        await library.save();
+
+        res.json({ library: library.book });
     } catch (err) {
-        handleErrorResponse(res, err);
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error', message: err.message });
     }
 };

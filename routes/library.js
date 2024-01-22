@@ -13,6 +13,8 @@ router.use(express.json());
 router.post('/add', isLoggedIn,  libraryController.add_to_library_post);
 
 // Route to remove a book from the user's library
-router.post('/remove', isLoggedIn,  libraryController.remove_from_library_post);
+router.post('/remove', isLoggedIn, libraryController.remove_book_from_library);
+
+
 
 module.exports = router;
