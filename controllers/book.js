@@ -268,20 +268,46 @@ exports.book_delete_get = async (req, res) => {
         res.status(500).send('Error deleting book');
     }
 };
+
+
+// exports.book_detail_get = (req, res) => {
+//     Book.findById(req.query.id).populate('category')
+//         .then(book => {
+//             res.json({ book });
+//         })
+//         .catch(err => {
+//             console.error(err);
+//             res.status(500).send('Error retrieving book details');
+//         });
+// };
+
+// Get one book
 exports.book_detail_get = (req, res) => {
-    Book.findById(req.query.id).populate('category')
-        .then(book => {
-            res.json({ book });
+    const bookId = req.body.book; // Use req.body.book to get the book ID from the request body
+
+    Book.findById(bookId)
+        .then((book) => {
+            if (book) {
+                res.json({ book });
+            } else {
+                res.status(404).json({ error: 'Book not found' });
+            }
         })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Error retrieving book details');
+        .catch((err) => {
+            console.log(`Error reading specific book data ${bookId}`);
+            console.log(err);
+            res.status(500).json({ error: 'Internal server error' });
         });
 };
+
+
+
+
 // Get all books by category
 exports.book_getByCategory_get = (req, res) => {
-    const categoryId = req.query.id;
-    Product.find({ category: categoryId })
+    const categoryId = req.body.id;
+    console.log('Received Category ID:', categoryId); // Add this line for debugging
+    Book.find({ category: categoryId })
         .then((books) => {
             res.json({ books });
         })
