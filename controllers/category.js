@@ -32,9 +32,11 @@ exports.category_create_post = async (req, res) => {
 
 
 exports.category_index_get = (req, res) => {
-    Category.find().populate("book")
+    console.log('Fetching Cat');
+    Category.find()
     .then((categories) => {
-        res.json(categories)
+        console.log(categories);
+        res.json({categories})
     })
     .catch((err) => {
         console.log(err);
@@ -198,6 +200,7 @@ exports.category_detail_get = (req, res) => {
         res.status(500).send("Error retrieving category details.");
     });
 };
+
 
 
 exports.category_books_get = (req, res) => {
