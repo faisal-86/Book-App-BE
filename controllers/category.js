@@ -45,70 +45,6 @@ exports.category_index_get = (req, res) => {
 };
 
 
-// exports.category_edit_post = async (req, res) => {
-//     const { id } = req.params;
-//     const updatedData = req.body;
-
-//     if (req.file) {
-//         const image = `public/images/${req.file.filename}`;
-//         try {
-//             const imagePath = await uploadCloudinary.upload_single(image);
-//             updatedData.image = imagePath.url;
-
-//             fs.unlink(image, err => {
-//                 if (err) console.error(err);
-//                 else console.log('Local file deleted after Cloudinary upload.');
-//             });
-//         } catch (err) {
-//             console.log(err);
-//             return res.status(500).send("Error uploading image. Please try again later.");
-//         }
-//     }
-
-//     Category.findByIdAndUpdate(id, updatedData, { new: true })
-//         .then(updatedCategory => {
-//             res.json({ category: updatedCategory });
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).send("Error updating category.");
-//         });
-// };
-
-
-
-// exports.category_delete_get = (req, res) => {
-//     Category.findByIdAndDelete(req.query.id)
-//     .then((category) => {
-//         res.json({ category });
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//         res.status(500).send("Error deleting category.");
-//     });
-// };
-
-
-// exports.category_delete_get = async (req, res) => {
-//     try {
-//         const categoryId = req.query.id;
-//         const booksInCategory = await Book.find({ category: categoryId });
-
-//         if (booksInCategory.length > 0) {
-//             return res.status(400).send("Cannot delete category as it has associated books.");
-//         }
-
-//         const category = await Category.findByIdAndDelete(categoryId);
-//         if (!category) {
-//             return res.status(404).send("Category not found.");
-//         }
-
-//         res.json({ message: 'Category successfully deleted', category });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send("Error deleting category.");
-//     }
-// };
 
 
 exports.category_edit_post = async (req, res) => {
@@ -205,9 +141,10 @@ exports.category_detail_get = (req, res) => {
 
 exports.category_books_get = (req, res) => {
     const categoryId = req.query.id;
+    console.log('categoryId',categoryId);
     Book.find({ category: categoryId }).populate('category')
         .then(books => {
-            res.json(books);
+            res.json({books});
         })
         .catch(err => {
             console.error(err);

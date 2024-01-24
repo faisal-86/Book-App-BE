@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
     },
     "role": {
         type: String,
-        enum: ['admin', 'user', 'guest'],
+        enum: ['admin',  'guest'],
         default: 'guest'
     },
     "library": [{

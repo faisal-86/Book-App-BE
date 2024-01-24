@@ -35,10 +35,14 @@ const salt = 10;
 
 
 exports.auth_signup_post = (req, res) => {
+    
     console.log('Signing up new user');
     let user = new User(req.body);
+    
 
     let hash = bcrypt.hashSync(req.body.password, salt);
+
+    
 
     user.password = hash;
 

@@ -286,9 +286,10 @@ exports.book_delete_get = async (req, res) => {
 exports.book_detail_get = (req, res) => {
     const bookId = req.query.id; // Use req.body.book to get the book ID from the request body
 
-    Book.findById(bookId)
+    Book.findById(bookId).populate('category')
         .then((book) => {
             if (book) {
+                console.log(book);
                 res.json({ book });
             } else {
                 res.status(404).json({ error: 'Book not found' });
