@@ -77,4 +77,4 @@ Thumbs.db
 Desktop.ini
 
 # image uploader
-/public/uploads
+# /public/uploads
