@@ -12,8 +12,11 @@ exports.user_detail_get = (req, res) => {
     .then((user) => {
         console.log('Fetching user data..');
         // remove user password from the data 
-        user.password = '';
-        res.json({user});
+        if (user){
+            user.password = '';
+         return   res.json({user});
+        }
+        return res.json({'message': 'user not found'}).status(404);
     })
     .catch((err) => {
         console.log('Error getting user data');

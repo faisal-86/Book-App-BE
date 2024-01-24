@@ -66,6 +66,7 @@ exports.book_index_get = (req, res) => {
             res.status(500).send('Error retrieving books');
         });
 };
+
 exports.get_mybook_get = (req, res) => {
     Book.find({ user: req.query.user })
         .then(myBooks => {
@@ -283,7 +284,7 @@ exports.book_delete_get = async (req, res) => {
 
 // Get one book
 exports.book_detail_get = (req, res) => {
-    const bookId = req.body.book; // Use req.body.book to get the book ID from the request body
+    const bookId = req.query.id; // Use req.body.book to get the book ID from the request body
 
     Book.findById(bookId)
         .then((book) => {
