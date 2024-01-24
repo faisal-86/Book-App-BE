@@ -7,8 +7,7 @@ const Library = require('../models/Library');
 exports.user_detail_get = (req, res) => {
     // get the user id
     console.log(`user details request`);
-    console.log(req.query.id);
-    User.findById(req.query.id)
+    User.findById(req.user.id)
     .then((user) => {
         console.log('Fetching user data..');
         // remove user password from the data 
