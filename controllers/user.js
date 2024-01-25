@@ -7,8 +7,7 @@ const Library = require('../models/Library');
 exports.user_detail_get = (req, res) => {
     // get the user id
     console.log(`user details request`);
-    console.log(req.query.id);
-    User.findById(req.query.id)
+    User.findById(req.user.id)
     .then((user) => {
         console.log('Fetching user data..');
         // remove user password from the data 
@@ -58,20 +57,20 @@ exports.user_update_post = (req, res) => {
 exports.user_library_get = (req, res) => {
     // Check if req.user exists and has an 'id' property
     if (req.user && req.user.id) {
-        User.findById(req.user.id)
-            .populate('library')  
-            .then((user) => {
+        Library.findOne({user: req.user.id})
+            .populate('book')  
+            .then((library) => {
                 // Check if the user is found
-                if (!user) {
+                if (!library) {
                     console.log('User not found');
                     return res.status(404).json({ message: 'User not found' });
                 }
 
                 console.log('Fetching user library...');
-                console.log('User:', user); // Log the user object
-                console.log('User Library:', user.library); // Log the user's library
+                console.log('User:', library); // Log the user object
+                console.log('User Library:', library); // Log the user's library
 
-                res.json({ library: user.library });
+                res.json({ books: library.book });
             })
             .catch((err) => {
                 console.log('Error getting user library');

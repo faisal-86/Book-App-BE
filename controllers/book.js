@@ -144,9 +144,10 @@ exports.book_delete_get = async (req, res) => {
 
 exports.book_detail_get = (req, res) => {
     const bookId = req.query.id;
-    Book.findById(bookId)
+    Book.findById(bookId).populate('category')
         .then((book) => {
             if (book) {
+                console.log(book);
                 res.json({ book });
             } else {
                 res.status(404).json({ error: 'Book not found' });
