@@ -1,11 +1,15 @@
 const express = require('express');
 require('dotenv').config()
+const cors = require('cors');
 
 // connect to mongoDB
 const db = require('./config/db')
 
 // initialize express app
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
 
 //  Middlewares
 app.use(express.urlencoded({ extended: true }));

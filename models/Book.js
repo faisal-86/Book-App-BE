@@ -18,7 +18,10 @@ const bookSchema = mongoose.Schema({
         ref: 'Category',
         required: false
     },
-    
+    "epubFilePath": {
+        type: String,
+        required: true
+    },
     "reviews": [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review'
