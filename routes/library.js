@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const libraryController = require('../controllers/library');
+
 const isLoggedIn = require('../helper/isLoggedIn');
 
 
@@ -14,6 +15,9 @@ router.post('/add', isLoggedIn,  libraryController.add_to_library_post);
 
 // Route to remove a book from the user's library
 router.post('/remove', isLoggedIn, libraryController.remove_book_from_library);
+
+// router.post('/library/add_to_library', libraryController.add_to_library_post);
+// router.post('/add', isLoggedIn, libraryController.add_to_library_post);
 
 
 
